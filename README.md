@@ -10,3 +10,17 @@ The data needs to be transformed and stored in GBP, EUR and INR as well, in acco
 The processed information table is to be saved locally in a CSV format and as a database table.
 
 Create an automated system to generate this information so that the same can be executed in every financial quarter to prepare the report.
+
+
+## Libraries and Data
+Install Libraries and Download the required exchange rate file using the terminal command
+```
+python3.11 -m pip install requests
+python3.11 -m pip install bs4
+python3.11 -m pip install pandas
+python3.11 -m pip install sqlite3
+python3.11 -m pip install numpy
+python3.11 -m pip install datetime
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMSkillsNetwork-PY0221EN-Coursera/labs/v2/exchange_rate.csv
+```
