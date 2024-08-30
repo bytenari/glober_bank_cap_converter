@@ -42,6 +42,10 @@ def extract(url, table_attribs):
                 df1 = pd.DataFrame(data_dict, index=[0])
                 df = pd.concat([df,df1], ignore_index=True)
 
+    MC_USD_list = df["MC_USD_Billion"].tolist()
+    MC_USD_list = [float(x) for x in MC_USD_list]
+    df["MC_USD_Billion"] = MC_USD_list
+
     return df
 
 def transform(df, csv_path):
@@ -49,8 +53,13 @@ def transform(df, csv_path):
     information, and adds three columns to the data frame, each
     containing the transformed version of Market Cap column to
     respective currencies'''
-    rate_dict = dataframe.set_index('Col_1_header').to_dict()['Col_2_header']
-
+    attribute_list = ['EUR', 'GBP', 'INR']
+    df = pd.read_csv(csv_path, names = attribute_list)
+    exchange_rate = dataframe.set_index('Currency').to_dict('Rate')]
+    df['MC_GBP_Billion'] = [np.round(x*exchange_rate['GBP'],2) for x in df['MC_USD_Billion']]
+    df['MC_EUR_Billion'] = [np.round(x*exchange_rate['EUR'],2) for x in df['MC_USD_Billion']]
+    df['MC_INR_Billion'] = [np.round(x*exchange_rate['INR'],2) for x in df['MC_USD_Billion']]
+ 
     return df
 
 def load_to_csv(df, output_path):
@@ -77,4 +86,8 @@ csv_path = './Largest_banks_data.csv'
     
 log_progress('Preliminaries complete. Initiating ETL process')
 df = extract(url, table_attribs)
+print(df)
+
+log_progress('Data extraction complete. Initiating Transformation process')
+df = transform(df, exrate_csv_path)
 print(df)
